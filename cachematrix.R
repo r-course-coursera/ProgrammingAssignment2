@@ -40,17 +40,34 @@ makeCacheMatrix <- function(matrix = matrix()) {
 ## by the function above. If we can read the value from the cache,
 ## do this instead of calculating again.
 
-cacheSolve <- function(cachedmatrix, ...) {
+cacheSolve <- function(matrixWithCache, ...) {
         ## Return a matrix that is the inverse of 'x'
         
-        inverse <- cachedmatrix$getinverse()
-        if(!is.null(inverse)) {
-                message("getting cached data")
-                return(inverse)
-        }
-        data <- cachedmatrix$get()
-        inverse <- mean(data, ...)
-        cachedmatrix$setinverse(inverse)
-        inverse
+        ## try to read cached inverse
+        cached_inverse <- matrixWithCache$getinverse()
         
+        ## cached inverse found => return it
+        if(!is.null(cached_inverse)) {
+                message("getting cached data")
+                return(cached_inverse)
+        }
+        
+        ## cache inverse not found => calculate it
+        
+        ## get "real" matrix from the "cached matrix" input parameter
+        data <- matrixWithCache$get()
+        
+        ## calculate inverse by using the solve() function
+        
+        ## (note that solve() only works on square invertible matrices
+        ## and while the assignment's description tells us to assume the
+        ## matrix to be inversible, it does not actually tell us that the
+        ## matrix is square. However, we'll assume it is, here.)
+        inverse <- solve(data, ...)
+        
+        # "store" the inverse for this matrix
+        matrixWithCache$setinverse(inverse)
+        
+        # return the calculated inverse
+        inverse
 }
