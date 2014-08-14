@@ -45,7 +45,7 @@ cacheSolve <- function(matrixWithCache, ...) {
         
         ## try to read cached inverse
         cached_inverse <- matrixWithCache$getinverse()
-        
+                
         ## cached inverse found => return it
         if(!is.null(cached_inverse)) {
                 message("getting cached data")
